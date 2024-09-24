@@ -1,0 +1,40 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Category {
+  id            String        @id @default(uuid())
+  name          String        @unique
+  createdAt     DateTime      @default(now())
+  subcategories Subcategory[]
+  events        Event[]
+}
+
+model Subcategory {
+  id         String   @id @default(uuid())
+  name       String
+  categoryId String
+  createdAt  DateTime @default(now())
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  events     Event[]
+}
+
+model Event {
+  id            String      @id @default(uuid())
+  name          String
+  date          DateTime
+  venue         String
+  imageUrl      String?
+  categoryId    String
+  subcategoryId String
+  contactPhone  String?
+  contactEmail  String?
+  createdAt     DateTime    @default(now())
+  category      Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  subcategory   Subcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+}

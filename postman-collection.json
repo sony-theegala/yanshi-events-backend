@@ -1,0 +1,284 @@
+{
+  "info": {
+    "name": "yanshi-events-backend",
+    "_postman_id": "abc12345-1234-1234-1234-abcdef123456",
+    "description": "API for managing categories, subcategories, and events in yanshi-events-backend.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Categories",
+      "item": [
+        {
+          "name": "Create Category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"New Category\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/categories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["categories"]
+            }
+          }
+        },
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/categories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["categories"]
+            }
+          }
+        },
+        {
+          "name": "Delete Category",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:3000/categories/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["categories", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Subcategories",
+      "item": [
+        {
+          "name": "Create Subcategory",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"New Subcategory\",\n    \"categoryId\": \"<category-uuid>\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/subcategories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["subcategories"]
+            }
+          }
+        },
+        {
+          "name": "Get All Subcategories",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/subcategories",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["subcategories"]
+            }
+          }
+        },
+        {
+          "name": "Delete Subcategory",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:3000/subcategories/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["subcategories", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Subcategories By Category ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/subcategories/category/:categoryId",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["subcategories", "category", ":categoryId"],
+              "variable": [
+                {
+                  "key": "categoryId",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "Create Event",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"New Event\",\n    \"date\": 1693838400000,\n    \"venue\": \"Venue Name\",\n    \"categoryId\": \"<category-uuid>\",\n    \"subcategoryId\": \"<subcategory-uuid>\",\n    \"contactPhone\": \"1234567890\",\n    \"contactEmail\": \"example@example.com\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/events",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["events"]
+            }
+          }
+        },
+        {
+          "name": "Get All Events",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/events",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["events"]
+            }
+          }
+        },
+        {
+          "name": "Get Event By ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/events/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["events", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Event",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Updated Event\",\n    \"date\": 1693924800000,\n    \"venue\": \"Updated Venue\",\n    \"categoryId\": \"<category-uuid>\",\n    \"subcategoryId\": \"<subcategory-uuid>\",\n    \"contactPhone\": \"0987654321\",\n    \"contactEmail\": \"updated@example.com\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:3000/events/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["events", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Event",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "http://localhost:3000/events/:id",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["events", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Events By Category and Subcategory",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/events/filter?categoryId=<category-uuid>&subcategoryId=<subcategory-uuid>",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["events", "filter"],
+              "query": [
+                {
+                  "key": "categoryId",
+                  "value": "<category-uuid>"
+                },
+                {
+                  "key": "subcategoryId",
+                  "value": "<subcategory-uuid>"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
