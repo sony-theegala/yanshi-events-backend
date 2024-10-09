@@ -23,9 +23,9 @@ jobs:
         run: npm ci
 
       - name: Set Up Environment Variables
-run: |
-  echo "PORT=${{ secrets.PORT }}" > .env
-  echo "DATABASE_URL=\"${{ secrets.DATABASE_URL }}\"" >> .env
+        run: |
+          echo "PORT=${{ secrets.PORT }}" > .env
+          echo "DATABASE_URL=\"${{ secrets.DATABASE_URL }}\"" >> .env
 
 
       - name: Restart Application with PM2
