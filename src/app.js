@@ -11,6 +11,10 @@ app.use(cors());
 app.use(express.json());
 app.use(logger);
 
+app.get("/", (req, res) => {
+    res.send("Hello from yanshi-events-backend");
+  });
+
 app.use("/categories", categoryRoutes);
 app.use("/subcategories", subcategoryRoutes);
 app.use("/events", eventRoutes);
