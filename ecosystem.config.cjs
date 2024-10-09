@@ -4,10 +4,7 @@ module.exports = {
         name: "yanshi-events-backend",
         script: "./index.js",
         watch: true,
-        env: {
-          PORT: process.env.PORT,
-          DATABASE_URL: process.env.DATABASE_URL,
-        },
+        node_args: "--env-file ./.env",
       },
     ],
   };
