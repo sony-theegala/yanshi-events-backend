@@ -6,23 +6,37 @@ const prisma = new PrismaClient();
 // Schema for UUID validation
 const uuidSchema = z.string().uuid("Invalid UUID format");
 
+// Helper function to parse the date
+const parseDate = (dateInput) => {
+  const date = new Date(dateInput);
+  if (isNaN(date.getTime())) {
+    throw new Error("Invalid date format");
+  }
+  return date;
+};
+
 // Schema for creating and updating an event
 const createEventSchema = z.object({
   name: z.string().min(1, "Event name is required"),
-  date: z
-    .number()
-    .int()
-    .positive("Date must be a valid timestamp")
-    .refine((val) => !isNaN(new Date(val).getTime()), {
-      message: "Invalid timestamp",
+  date: z.union([
+    z.number().int().positive("Date must be a valid timestamp"),
+    z.string().refine((val) => !isNaN(Date.parse(val)), {
+      message: "Invalid date string format",
     }),
+  ]),
   venue: z.string().min(1, "Venue is required"),
-  imageUrl: z.string().url().optional(),
+  imageUrl: z.string().url().nullable().optional(), // Allows null, empty, or valid URL
   categoryId: uuidSchema, // Mandatory and must be a valid UUID
   subcategoryId: uuidSchema, // Mandatory and must be a valid UUID
   contactPhone: z.string().min(1, "Contact phone is required").optional(),
   contactEmail: z.string().email("Invalid email format").optional(),
 });
+
+// Helper function to include related category and subcategory
+const includeCategoryAndSubcategory = {
+  category: true,
+  subcategory: true,
+};
 
 // Create a new event
 export const createEvent = async (req, res) => {
@@ -50,25 +64,27 @@ export const createEvent = async (req, res) => {
       });
     }
 
+    // Parse the date to a Date object
+    const eventDate = typeof parsedData.date === "number" 
+      ? new Date(parsedData.date)
+      : parseDate(parsedData.date);
+
     // Create the event
     const event = await prisma.event.create({
       data: {
         ...parsedData,
-        date: new Date(parsedData.date),
+        date: eventDate,
       },
+      include: includeCategoryAndSubcategory, // Include related data
     });
 
-    // Return the created event
+    // Return the created event with category and subcategory
     res.json(event);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      res
-        .status(400)
-        .json({ message: "Validation Error", errors: error.errors });
+      res.status(400).json({ message: "Validation Error", errors: error.errors });
     } else {
-      res
-        .status(500)
-        .json({ message: "Internal server error", details: error.message });
+      res.status(500).json({ message: "Internal server error", details: error.message });
     }
   }
 };
@@ -77,17 +93,12 @@ export const createEvent = async (req, res) => {
 export const getEvents = async (req, res) => {
   try {
     const events = await prisma.event.findMany({
-      include: {
-        category: true,
-        subcategory: true,
-      },
+      include: includeCategoryAndSubcategory, // Include related data
       orderBy: { createdAt: "desc" },
     });
     res.json(events);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Internal server error", details: error.message });
+    res.status(500).json({ message: "Internal server error", details: error.message });
   }
 };
 
@@ -105,10 +116,7 @@ export const getEventById = async (req, res) => {
     // Retrieve the event
     const event = await prisma.event.findUnique({
       where: { id: validId.data },
-      include: {
-        category: true,
-        subcategory: true,
-      },
+      include: includeCategoryAndSubcategory, // Include related data
     });
 
     if (!event) {
@@ -117,9 +125,7 @@ export const getEventById = async (req, res) => {
 
     res.json(event);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Internal server error", details: error.message });
+    res.status(500).json({ message: "Internal server error", details: error.message });
   }
 };
 
@@ -137,25 +143,27 @@ export const updateEvent = async (req, res) => {
     // Parse and validate request body
     const parsedData = createEventSchema.parse(req.body);
 
+    // Parse the date to a Date object
+    const eventDate = typeof parsedData.date === "number" 
+      ? new Date(parsedData.date)
+      : parseDate(parsedData.date);
+
     // Update the event
     const event = await prisma.event.update({
       where: { id: validId.data },
       data: {
         ...parsedData,
-        date: new Date(parsedData.date),
+        date: eventDate,
       },
+      include: includeCategoryAndSubcategory, // Include related data
     });
 
     res.json(event);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      res
-        .status(400)
-        .json({ message: "Validation Error", errors: error.errors });
+      res.status(400).json({ message: "Validation Error", errors: error.errors });
     } else {
-      res
-        .status(500)
-        .json({ message: "Internal server error", details: error.message });
+      res.status(500).json({ message: "Internal server error", details: error.message });
     }
   }
 };
@@ -178,9 +186,7 @@ export const deleteEvent = async (req, res) => {
 
     res.json({ message: "Event deleted" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Internal server error", details: error.message });
+    res.status(500).json({ message: "Internal server error", details: error.message });
   }
 };
 
@@ -201,23 +207,16 @@ export const getEventsByCategoryAndSubcategory = async (req, res) => {
         categoryId: categoryId || undefined,
         subcategoryId: subcategoryId || undefined,
       },
-      include: {
-        category: true,
-        subcategory: true,
-      },
+      include: includeCategoryAndSubcategory, // Include related data
       orderBy: { createdAt: "desc" },
     });
 
     res.json(events);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      res
-        .status(400)
-        .json({ message: "Validation Error", errors: error.errors });
+      res.status(400).json({ message: "Validation Error", errors: error.errors });
     } else {
-      res
-        .status(500)
-        .json({ message: "Internal server error", details: error.message });
+      res.status(500).json({ message: "Internal server error", details: error.message });
     }
   }
 };
