@@ -23,11 +23,10 @@ CREATE TABLE "Event" (
     "name" TEXT NOT NULL,
     "date" TIMESTAMP(3) NOT NULL,
     "venue" TEXT NOT NULL,
-    "imageUrl" TEXT,
     "categoryId" TEXT NOT NULL,
     "subcategoryId" TEXT NOT NULL,
-    "contactPhone" TEXT,
-    "contactEmail" TEXT,
+    "contactPhone" TEXT NOT NULL,
+    "contactEmail" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Event_pkey" PRIMARY KEY ("id")

@@ -29,11 +29,10 @@ model Event {
   name          String
   date          DateTime
   venue         String
-  imageUrl      String?
   categoryId    String
   subcategoryId String
-  contactPhone  String?
-  contactEmail  String?
+  contactPhone  String
+  contactEmail  String
   createdAt     DateTime    @default(now())
   category      Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   subcategory   Subcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
