@@ -28,7 +28,7 @@ const createEventSchema = z.object({
   imageUrl: z.string().url().nullable().optional(), // Allows null, empty, or valid URL
   categoryId: uuidSchema, // Mandatory and must be a valid UUID
   subcategoryId: uuidSchema, // Mandatory and must be a valid UUID
-  contactPhone: z.string().min(12, "Contact phone is required").optional(),
+  contactPhone: z.string().min(8, "Contact phone is required").optional(),
   contactEmail: z.string().email("Invalid email format").optional(),
 });
 
