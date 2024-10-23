@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(logger);
 
 app.get("/", (req, res) => {
-    res.send("Hello from yanshii-events-backend");
+    res.send("Hi from yanshii-events-backend");
   });
 
 app.use("/categories", categoryRoutes);
